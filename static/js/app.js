@@ -7,6 +7,8 @@ function getJSONData() {
         getSubjectID(data.names);
         populateDemographic(data.metadata);
         showBarChart(data.samples);
+        showBubbleChart(data.samples);
+        showguageChart();
 
     });
 }
@@ -31,7 +33,7 @@ function populateDemographic(demoData) {
 };
 
 function showBarChart(sampleData) {
-    var samplesData = sampleData.filter(data => data.id == sel_value)
+    var samplesData = sampleData.filter(data => data.id == sel_value);
 
     var sample_values = samplesData[0].sample_values.slice(0, 10).reverse();
     var otu_ids = samplesData[0].otu_ids.slice(0, 10).reverse();
@@ -54,6 +56,83 @@ function showBarChart(sampleData) {
     };
     Plotly.newPlot('bar', trace, layout)
 };
+
+function showBubbleChart(bubbleData) {
+    var b_data = bubbleData.filter(data => data.id == sel_value);
+
+    var sample_values = b_data[0].sample_values;
+    var otu_id = b_data[0].otu_ids;
+    var otu_Labels = b_data[0].otu_labels;
+
+    var trace = [{
+        x: otu_id,
+        y: sample_values,
+        text: otu_Labels,
+        mode: "markers",
+        marker: {
+            color: otu_id,
+            size: sample_values
+        }
+    }];
+    var layout = {
+        showlegend: false,
+        autosize: true,
+        xaxis: {
+            title: "OTU ID"
+        }
+    };
+    Plotly.newPlot("bubble", trace, layout);
+}
+
+
+function showguageChart() {
+    // var gauge_data = gaugeData.filter(data => data.id == sel_value);
+
+    // var wfeq = gauge_data[0].wfeq;
+    var trace = [{
+        type: "pie",
+        showlegend: false,
+        hole: 0.4,
+        rotation: 90,
+        values: [180/9, 180/9, 180/9, 180/9, 180/9, 180/9, 180/9, 180/9, 180/9, 180],
+        text: ['0-1','1-2','2-3','3-4','4-5','5-6','6-7','7-8','8-9'],
+        direction: "clockwise",
+        textinfo: "text",
+        textposition: "inside",
+        marker: {
+            colors: ['#F8F3EC','#F4F1E5','#E9E6CA','#E2E4B1','#D5E49D','#B7CC92','#8CBF88','#8ABB8F','#85B48A','white'],
+        },
+        labels: ['0-1','1-2','2-3','3-4','4-5','5-6','6-7','7-8','8-9', ''],
+        hoverinfo: "label"
+    }];
+
+    var degrees = 118;
+    var radius = .6;
+    var radians = degrees * Math.PI / 100;
+    var x = -1 * radius * Math.cos(radians);
+    var y = radius * Math.sin(radians);
+
+    var layout = {
+        shapes: [{
+            type: 'line',
+            x0: 0,
+            y0: 0,
+            x1: x,
+            y1: 0.5,
+            line: {
+                color: 'red',
+                width: 4
+            }
+        }],
+        title: 'Belly Button Washing Frequency',
+        xaxis: { visible: false, range: [-1, 1] },
+        yaxis: { visible: false, range: [-1, 1] }
+    };
+
+
+    Plotly.newPlot('gauge', trace, layout);
+
+}
 
 function optionChanged() {
 
