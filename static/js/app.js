@@ -87,47 +87,38 @@ function showBubbleChart(bubbleData) {
 
 function showguageChart(gaugeData) {
     var gauge_data = gaugeData.filter(data => data.id == sel_value);
-    console.log(gauge_data)
 
-    var wfeq = gauge_data[0].wfeq;
+    var wfreq = gauge_data[0].wfreq;
+    var wfreq_labels = ['0-1', '1-2', '2-3', '3-4', '4-5', '5-6', '6-7', '7-8', '8-9', '']
+
     var trace = [{
         type: "pie",
         showlegend: false,
         hole: 0.2,
         rotation: 90,
-        values: [180/9, 180/9, 180/9, 180/9, 180/9, 180/9, 180/9, 180/9, 180/9, 180],
-        text: ['0-1','1-2','2-3','3-4','4-5','5-6','6-7','7-8','8-9'],
+        values: [360 / 9, 360 / 9, 360 / 9, 360 / 9, 360 / 9, 360 / 9, 360 / 9, 360 / 9, 360 / 9, 360],
+        text: wfreq_labels,
         direction: "clockwise",
         textinfo: "text",
         textposition: "inside",
+        insidetextorientation: "radial",
         marker: {
-            colors: ['#F8F3EC','#F4F1E5','#E9E6CA','#E2E4B1','#D5E49D','#B7CC92','#8CBF88','#8ABB8F','#85B48A','#fff'],
+            colors: ['#F8F3EC', '#F4F1E5', '#E9E6CA', '#E2E4B1', '#D5E49D', '#B7CC92', '#8CBF88', '#8ABB8F', '#85B48A', '#fff']
         },
-        labels: ['0-1','1-2','2-3','3-4','4-5','5-6','6-7','7-8','8-9', ''],
+        labels: wfreq_labels,
         hoverinfo: "label"
     }];
 
-    var degrees = 118;
-    var radius = .6;
-    var radians = degrees * Math.PI / 100;
-    var x = -1 * radius * Math.cos(radians);
-    var y = radius * Math.sin(radians);
+    // var degrees = 180;
+    // var radius = .5;
+    // var radians = degrees * Math.PI / degrees;
+    // var x = -1 * radius * Math.cos((radians) * Math.PI / degrees);
+    // var y = -1 * radius * Math.sin((radians) * Math.PI / degrees);
 
     var layout = {
-        shapes: [{
-            type: 'line',
-            x0: 0,
-            y0: 3.5,
-            x1: x,
-            y1: 0.5,
-            line: {
-                color: '#b30000',
-                width: 4
-            }
-        }],
-        title: '<b>Belly Button Washing Frequency</b><br>Scrubs per Week',
-        xaxis: { visible: false, range: [-1, 1] },
-        yaxis: { visible: false, range: [-1, 1] }
+            title: '<b>Belly Button Washing Frequency</b><br>Scrubs per Week',
+            xaxis: { visible: false, range: [-1, 1] },
+            yaxis: { visible: false, range: [-1, 1] }
     };
 
 
