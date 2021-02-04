@@ -1,9 +1,12 @@
-var sel = d3.select('#selDataset');
-var sel_value;
+// Global Variables for ID selection. Used for every graph
+var sel = d3.select('#selDataset'); // Get Element
+var sel_value; // Stage empty var
 
+// Build data layer once. Each function retrieves data from here
 function getJSONData() {
     d3.json("Resources/data/samples.json").then(function (data) {
 
+        // Function calls returning data
         getSubjectID(data.names);
         populateDemographic(data.metadata);
         showBarChart(data.samples);
@@ -12,29 +15,30 @@ function getJSONData() {
 
     });
 }
-
+// Function to populate Subject ID dropdown with data {names} from sample json
 function getSubjectID(subData) {
     var subject_ids = subData;
     subject_ids.forEach(data => {
         sel.append("option").property("value", data).text(data);
         sel_value = sel.property("value");
-        // console.log(data.samples)
     })
 }
 
+// Function to populate demographic data
 function populateDemographic(demoData) {
-
     var metadata = demoData;
-    var demographic_area = d3.select("#sample-metadata").html("");
-    var demo_data = metadata.filter(m => m.id == sel_value)
+    var demographic_area = d3.select("#sample-metadata").html(""); //Get html by ID
+    var demo_data = metadata.filter(m => m.id == sel_value)// Retrieve data based on selection
     Object.entries(demo_data[0]).forEach(([key, value]) => {
-        demographic_area.append("p").text(`${key.toUpperCase()}: ${value}`)
+        demographic_area.append("p").text(`${key.toUpperCase()}: ${value}`) // For Each item append to the html element for the demographic data
     });
 };
 
+// Display Bar Chart 
 function showBarChart(sampleData) {
-    var samplesData = sampleData.filter(data => data.id == sel_value);
+    var samplesData = sampleData.filter(data => data.id == sel_value);// Retrieve data based on selection
 
+    // Create variables to store needed x/y values as well as labels
     var sample_values = samplesData[0].sample_values.slice(0, 10).reverse();
     var otu_ids = samplesData[0].otu_ids.slice(0, 10).reverse();
     otu_ids = otu_ids.map(d => "OTU " + d)
@@ -58,7 +62,7 @@ function showBarChart(sampleData) {
 };
 
 function showBubbleChart(bubbleData) {
-    var b_data = bubbleData.filter(data => data.id == sel_value);
+    var b_data = bubbleData.filter(data => data.id == sel_value);// Retrieve data based on selection
 
     var sample_values = b_data[0].sample_values;
     var otu_id = b_data[0].otu_ids;
@@ -86,7 +90,7 @@ function showBubbleChart(bubbleData) {
 
 
 function showguageChart(gaugeData) {
-    var gauge_data = gaugeData.filter(data => data.id == sel_value);
+    var gauge_data = gaugeData.filter(data => data.id == sel_value);// Retrieve data based on selection
 
     var wfreq = gauge_data[0].wfreq;
     var wfreq_labels = ['0-1', '1-2', '2-3', '3-4', '4-5', '5-6', '6-7', '7-8', '8-9', '']
@@ -109,16 +113,11 @@ function showguageChart(gaugeData) {
         hoverinfo: "label"
     }];
 
-    // var degrees = 180;
-    // var radius = .5;
-    // var radians = degrees * Math.PI / degrees;
-    // var x = -1 * radius * Math.cos((radians) * Math.PI / degrees);
-    // var y = -1 * radius * Math.sin((radians) * Math.PI / degrees);
 
     var layout = {
-            title: '<b>Belly Button Washing Frequency</b><br>Scrubs per Week',
-            xaxis: { visible: false, range: [-1, 1] },
-            yaxis: { visible: false, range: [-1, 1] }
+        title: '<b>Belly Button Washing Frequency</b><br>Scrubs per Week',
+        xaxis: { visible: false, range: [-1, 1] },
+        yaxis: { visible: false, range: [-1, 1] }
     };
 
 
